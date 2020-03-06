@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { logout } from '../../redux/actions/auth';
+import { setAutoIn } from '../../redux/actions/autoin';
+
 import Logo from '../../logo-white.svg';
 import './Navbar.css';
 
@@ -37,10 +39,23 @@ const loadNavItem = (userlevel, channelId) => {
   }
 };
 
-const Navbar = ({ logout, userlevel, channelId, username }) => {
+const Navbar = ({
+  logout,
+  setAutoIn,
+  userlevel,
+  channelId,
+  username,
+  played,
+  autoinLoading
+}) => {
   const onClickLogout = e => {
     logout(username);
   };
+
+  const onClickAutoIn = e => {
+    setAutoIn(username);
+  };
+
   return (
     <nav className="navigation">
       <div className="nav-group">
@@ -50,6 +65,19 @@ const Navbar = ({ logout, userlevel, channelId, username }) => {
               <img src={Logo} alt="logo" />
             </NavLink>
           </li>
+          <li>
+            <button
+              className="btn btn-lg nav-button"
+              onClick={e => onClickAutoIn()}
+              disabled={autoinLoading}
+            >
+              {played ? (
+                <i className="fa fa-pause autoin-button-icon"></i>
+              ) : (
+                <i className="fa fa-play autoin-button-icon"></i>
+              )}
+            </button>
+          </li>
           {loadNavItem(userlevel, channelId)}
           <li className="brackets">
             <NavLink to="/friends-chat" activeClassName="active">
@@ -57,8 +85,11 @@ const Navbar = ({ logout, userlevel, channelId, username }) => {
             </NavLink>
           </li>
           <li>
-            <button className="btn btn-lg" onClick={e => onClickLogout()}>
-              <i className="ti-power-off logout-button"></i>
+            <button
+              className="btn btn-lg nav-button"
+              onClick={e => onClickLogout()}
+            >
+              <i className="ti-power-off logout-button-icon"></i>
             </button>
           </li>
         </ul>
@@ -74,4 +105,9 @@ Navbar.propTypes = {
   logout: PropTypes.func.isRequired
 };
 
-export default connect(null, { logout })(Navbar);
+const mapStateToProps = ({ autoin }) => ({
+  played: autoin.played,
+  autoinLoading: autoin.loading
+});
+
+export default connect(mapStateToProps, { logout, setAutoIn })(Navbar);

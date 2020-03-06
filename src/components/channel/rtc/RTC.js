@@ -1,11 +1,34 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import capitalize from '../../../utils/capitalizeString';
+import createAvatartString from '../../../utils/createAvatartString';
 
-const RTC = ({ match }) => {
+const RTC = ({ match, rtcQueueLists }) => {
   const channelId = match.params[0];
-  console.log('channelId', channelId);
+
+  const queues = rtcQueueLists[channelId].map(queueList => {
+    return (
+      <li className="list-group-item" key={queueList.sessionId}>
+        <figure className="avatar">
+          <span className="avatar-title bg-info rounded-circle">
+            {createAvatartString(queueList.fromName)}
+          </span>
+        </figure>
+        <div className="users-list-body">
+          <h6>{queueList.fromName}</h6>
+          <p>{queueList.lastChat}</p>
+          {queueList.messageCount > 0 && (
+            <div className="users-list-action">
+              <div className="new-message-count">{queueList.messageCount}</div>
+            </div>
+          )}
+        </div>
+      </li>
+    );
+  });
+
   return (
     // Left Column
     <div className="sidebar-group">
@@ -15,6 +38,9 @@ const RTC = ({ match }) => {
           <span>{capitalize(channelId)}</span>
         </header>
         {/* Customer List Body */}
+        <div className="sidebar-body">
+          <ul className="list-group list-group-flush">{queues}</ul>
+        </div>
 
         {/* ./ Customer List Body */}
       </div>
@@ -24,6 +50,11 @@ const RTC = ({ match }) => {
   );
 };
 
-// RTC.propTypes = {};
+RTC.propTypes = {
+  match: PropTypes.object.isRequired,
+  rtcQueueLists: PropTypes.object.isRequired
+};
 
-export default RTC;
+const mapStateToProps = ({ rtc }) => ({ rtcQueueLists: rtc });
+
+export default connect(mapStateToProps)(RTC);

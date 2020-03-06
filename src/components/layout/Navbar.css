@@ -1,3 +1,12 @@
-.logout-button:hover {
+.nav-button {
+  margin-left: 5px;
+  outline: 0;
+}
+
+.logout-button-icon:hover {
   color: red;
+}
+
+.autoin-button-icon:hover {
+  color: blue;
 }

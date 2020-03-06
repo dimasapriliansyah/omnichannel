@@ -1,5 +1,5 @@
 import { RTC_NEW_QUEUE } from '../actions/types';
-
+import { produce } from 'immer';
 const initialState = {
   whatsapp: [],
   telegram: []
@@ -10,8 +10,9 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case RTC_NEW_QUEUE:
-      console.log(payload);
-      return initialState;
+      return produce(state, draftState => {
+        draftState[payload.channelId].push(payload);
+      });
 
     default:
       return initialState;

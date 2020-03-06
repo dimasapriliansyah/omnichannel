@@ -1,3 +1,29 @@
 countQueue
 newQueue
 newInteraction:whatsapp
+
+newQueue
+id: 1
+sessionId: "whatsapp-9ef76b0f-1751-424f-a28a-5e21fbd1dabc"
+channelId: "whatsapp"
+account: "123"
+customerId: 1
+from: "082217788230"
+fromName: "Dimas Apriliansyah"
+agentUsername: "dimasapril"
+groupId: 1
+priority: 0
+startDate: "2020-03-06T14:32:52.000Z"
+pickupDate: "2020-03-06T17:28:00.048Z"
+frDate: null
+endDate: null
+submitCwcDate: null
+endStatus: false
+caseIn: null
+caseOut: null
+updatedAt: "2020-03-06T17:28:00.000Z"
+lastChat: "Test"
+messageCount: 1
+
+countQueue
+whatsapp: 2

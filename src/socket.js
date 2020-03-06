@@ -1,3 +1,6 @@
+import store from './redux/store';
+import { newQueue as newQueueRTC } from './redux/actions/rtc';
+import { RTC as rtcChannels, NRTC as nrtcChannels } from './utils/channels';
 export const connectHandler = () => {
   console.log('[Socket default event => connect] Socket connected');
 };
@@ -60,5 +63,24 @@ export const pong = latency => {
 
 export const newQueueHandler = msg => {
   console.log('[Socket event => newQueue]');
+
+  const isRTC = rtcChannels.filter(channel => channel === msg.channelId);
+
+  const isNRTC = nrtcChannels.filter(channel => channel === msg.channelId);
+
+  if (isRTC.length > 0 && isNRTC.length <= 0) {
+    store.dispatch(newQueueRTC(msg));
+  } else if (isRTC.length <= 0 && isNRTC.length > 0) {
+    console.log('incoming nonrtc', msg);
+  }
+};
+
+export const countQueueHandler = msg => {
+  console.log('[Socket event => countQueue]');
+  console.log('msg', msg);
+};
+
+export const newInteractionHandler = msg => {
+  console.log('[Socket event => countQueue]');
   console.log('msg', msg);
 };

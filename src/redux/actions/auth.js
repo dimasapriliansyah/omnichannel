@@ -30,9 +30,9 @@ export const logout = username => async dispatch => {
     };
 
     const body = { username };
-    const response = await axios.post('/auth/logout', body, config);
+    await axios.post('/auth/logout', body, config);
 
-    dispatch({ type: USER_LOGGEDOUT, payload: response.data });
+    dispatch({ type: USER_LOGGEDOUT });
   } catch (error) {
     dispatch({ type: LOGOUT_FAIL, payload: error.response.data });
   }

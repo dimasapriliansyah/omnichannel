@@ -22,7 +22,9 @@ import {
   reconnectFailHandler,
   ping as socketPingHandler,
   pong as socketPongHandler,
-  newQueueHandler
+  newQueueHandler,
+  countQueueHandler,
+  newInteractionHandler
 } from '../../socket';
 
 const TENANT_ID = 'omnichannel_dev';
@@ -34,15 +36,13 @@ class Content extends Component {
   componentDidMount() {
     const { username, userlevel, groupId, name, isAuthenticated } = this.props;
 
-    if (!isAuthenticated) {
-      return;
-    }
+    if (!isAuthenticated) return;
 
     const socketOptions = {
       query: {
         tenantId: TENANT_ID,
         username,
-        userlevel,
+        level: userlevel,
         groupId,
         name
       }
@@ -65,6 +65,12 @@ class Content extends Component {
 
     // CUSTOM SOCKET IO EVENTS
     this.socket.on('newQueue', newQueueHandler);
+    this.socket.on('countQueue', countQueueHandler);
+    this.socket.on('newInteraction:whatsapp', newInteractionHandler);
+
+    this.socket.on('hallo', msg => {
+      console.log(msg);
+    });
   }
 
   componentWillUnmount() {
