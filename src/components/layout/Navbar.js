@@ -68,7 +68,7 @@ const Navbar = ({
           <li>
             <button
               className="btn btn-lg nav-button"
-              onClick={e => onClickAutoIn()}
+              onClick={() => onClickAutoIn()}
               disabled={autoinLoading}
             >
               {played ? (
