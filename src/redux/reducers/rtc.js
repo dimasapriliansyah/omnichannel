@@ -11,7 +11,23 @@ export default function(state = initialState, action) {
   switch (type) {
     case RTC_NEW_QUEUE:
       return produce(state, draftState => {
-        draftState[payload.channelId].push(payload);
+        let sessionExisted = false;
+
+        const { channelId, sessionId, lastChat } = payload;
+
+        draftState[channelId].forEach((data, index) => {
+          if (data.sessionId === sessionId) {
+            sessionExisted = index;
+          }
+        });
+
+        if (sessionExisted) {
+          draftState[channelId][sessionExisted].lastChat = lastChat;
+          draftState[channelId][sessionExisted].messageCount++;
+        } else {
+          payload.messageCount = 0;
+          draftState[channelId].push(payload);
+        }
       });
 
     default:

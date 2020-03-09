@@ -1,60 +1,53 @@
-import React from 'react';
+import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import capitalize from '../../../utils/capitalizeString';
-import createAvatartString from '../../../utils/createAvatartString';
+import { loadInteraction } from '../../../redux/actions/interaction';
 
-const RTC = ({ match, rtcQueueLists }) => {
-  const channelId = match.params[0];
+import Order from './Order';
+import Chat from './Chat';
 
-  const queues = rtcQueueLists[channelId].map(queueList => {
+import Cwc from '../../layout/Cwc';
+
+class RTC extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sessionId: ''
+    };
+    this.setSessionId = this.setSessionId.bind(this);
+  }
+  setSessionId(sessionId, channelId) {
+    const { loadInteraction } = this.props;
+    loadInteraction(channelId, sessionId);
+    this.setState({ sessionId });
+  }
+
+  render() {
+    const { match, rtcQueueLists } = this.props;
+    const { sessionId } = this.state;
     return (
-      <li className="list-group-item" key={queueList.sessionId}>
-        <figure className="avatar">
-          <span className="avatar-title bg-info rounded-circle">
-            {createAvatartString(queueList.fromName)}
-          </span>
-        </figure>
-        <div className="users-list-body">
-          <h6>{queueList.fromName}</h6>
-          <p>{queueList.lastChat}</p>
-          {queueList.messageCount > 0 && (
-            <div className="users-list-action">
-              <div className="new-message-count">{queueList.messageCount}</div>
-            </div>
-          )}
-        </div>
-      </li>
+      <Fragment>
+        <Order
+          lists={rtcQueueLists}
+          match={match}
+          currentSessionId={sessionId}
+          setSessionId={this.setSessionId}
+        />
+        <Chat currentSessionId={sessionId} />
+        <Cwc />
+      </Fragment>
     );
-  });
-
-  return (
-    // Left Column
-    <div className="sidebar-group">
-      {/* Customer Lists */}
-      <div id="chats" className="sidebar active">
-        <header className="bg-green">
-          <span>{capitalize(channelId)}</span>
-        </header>
-        {/* Customer List Body */}
-        <div className="sidebar-body">
-          <ul className="list-group list-group-flush">{queues}</ul>
-        </div>
-
-        {/* ./ Customer List Body */}
-      </div>
-      {/* ./ Customer Lists */}
-    </div>
-    // ./Left Column
-  );
-};
+  }
+}
 
 RTC.propTypes = {
   match: PropTypes.object.isRequired,
   rtcQueueLists: PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({ rtc }) => ({ rtcQueueLists: rtc });
+const mapStateToProps = ({ rtc, interaction }) => ({
+  rtcQueueLists: rtc
+});
 
-export default connect(mapStateToProps)(RTC);
+export default connect(mapStateToProps, { loadInteraction })(RTC);

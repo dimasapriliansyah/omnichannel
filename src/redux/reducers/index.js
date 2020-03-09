@@ -5,11 +5,13 @@ import { USER_LOGGEDOUT } from '../actions/types';
 import auth from './auth';
 import autoin from './autoin';
 import rtc from './rtc';
+import interaction from './interaction';
 
 const appReducer = combineReducers({
   auth,
   autoin,
-  rtc
+  rtc,
+  interaction
 });
 const rootReducer = (state, action) => {
   if (action.type === USER_LOGGEDOUT) {

@@ -9,6 +9,8 @@ import Navbar from './Navbar';
 import RTC from '../channel/rtc/RTC';
 import NRTC from '../channel/nrtc/NRTC';
 
+import './Content.css';
+
 import {
   connectHandler,
   connectErrorHandler,
@@ -90,7 +92,7 @@ class Content extends Component {
           userlevel={userlevel}
           channelId={channelId}
         />
-        <div className="content">
+        <div className="content" id="app-content">
           <Switch>
             <PrivateRoute exact path={`/agent/${rtcPath}`} component={RTC} />
             <PrivateRoute exact path={`/agent/${nrtcPath}`} component={NRTC} />
