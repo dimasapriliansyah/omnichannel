@@ -24,7 +24,7 @@ class RTC extends Component {
   }
 
   render() {
-    const { match, rtcQueueLists } = this.props;
+    const { match, rtcQueueLists, agentdata } = this.props;
     const { sessionId } = this.state;
     return (
       <Fragment>
@@ -34,7 +34,7 @@ class RTC extends Component {
           currentSessionId={sessionId}
           setSessionId={this.setSessionId}
         />
-        <Chat currentSessionId={sessionId} />
+        <Chat currentSessionId={sessionId} agentdata={agentdata} />
         <Cwc />
       </Fragment>
     );
@@ -46,8 +46,9 @@ RTC.propTypes = {
   rtcQueueLists: PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({ rtc, interaction }) => ({
-  rtcQueueLists: rtc
+const mapStateToProps = ({ rtc, auth }) => ({
+  rtcQueueLists: rtc,
+  agentdata: auth.user
 });
 
 export default connect(mapStateToProps, { loadInteraction })(RTC);

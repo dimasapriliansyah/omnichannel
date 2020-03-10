@@ -1,10 +1,27 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 function ChatBody(props) {
   const { loading, data, error } = props;
+  const chatBodyRef = useRef();
+
+  useEffect(() => {
+    chatBodyRef.current.scrollTop =
+      chatBodyRef.current.scrollHeight - chatBodyRef.current.clientHeight;
+  }, [data]);
+
+  const chatClassName = ({ messageType, actionType }) => {
+    if (messageType === 'text') {
+      if (actionType === 'out') {
+        return 'message-content text-muted';
+      }
+      return 'message-content';
+    }
+
+    return 'message-content message-file';
+  };
   return (
-    <div className="chat-body" id="app-chat-body">
+    <div className="chat-body" ref={chatBodyRef} id="app-chat-body">
       {!loading && data.length > 0 && !error && (
         <div className="messages">
           {data.map(message => (
@@ -16,13 +33,7 @@ function ChatBody(props) {
               }
               key={message.id}
             >
-              <div
-                className={
-                  message.messageType === 'text'
-                    ? 'message-content'
-                    : 'message-content message-file'
-                }
-              >
+              <div className={chatClassName(message)}>
                 {message.messageType === 'text' ? (
                   message.message
                 ) : (

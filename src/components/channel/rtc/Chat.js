@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -10,14 +10,19 @@ import './Chat.css';
 
 class Chat extends Component {
   render() {
-    const { interaction } = this.props;
+    const { interaction, agentdata } = this.props;
     const { loading, data, error } = interaction;
 
     return (
       <div className="chat" id="app-chat">
         <ChatHeader loading={loading} data={data} error={error} />
         <ChatBody loading={loading} data={data} error={error} />
-        <ChatFooter loading={loading} data={data} error={error} />
+        <ChatFooter
+          loading={loading}
+          data={data}
+          error={error}
+          agentdata={agentdata}
+        />
       </div>
     );
   }

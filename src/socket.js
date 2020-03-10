@@ -1,5 +1,8 @@
 import store from './redux/store';
-import { newQueue as newQueueRTC } from './redux/actions/rtc';
+import {
+  newQueue as newQueueRTC,
+  newInteraction as newInteractionRTC
+} from './redux/actions/rtc';
 import { RTC as rtcChannels, NRTC as nrtcChannels } from './utils/channels';
 export const connectHandler = () => {
   console.log('[Socket default event => connect] Socket connected');
@@ -81,6 +84,8 @@ export const countQueueHandler = msg => {
 };
 
 export const newInteractionHandler = msg => {
-  console.log('[Socket event => countQueue]');
+  console.log('[Socket event => newInteractionHandler]');
   console.log('msg', msg);
+
+  store.dispatch(newInteractionRTC(msg));
 };

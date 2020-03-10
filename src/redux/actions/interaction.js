@@ -1,7 +1,8 @@
 import {
   GET_INTERACTION,
   INTERACTION_LOADED,
-  GET_INTERACTION_FAIL
+  GET_INTERACTION_FAIL,
+  RESET_CHAT_COUNT
 } from './types';
 
 import axios from 'axios';
@@ -21,11 +22,15 @@ export const loadInteraction = (channelId, sessionId) => async dispatch => {
     );
 
     dispatch({
+      type: RESET_CHAT_COUNT,
+      payload: { channelId, sessionId }
+    });
+
+    dispatch({
       type: INTERACTION_LOADED,
       payload: { response: response.data.data, sessionId }
     });
   } catch (error) {
-    console.log('error', error);
-    // dispatch({ type: GET_INTERACTION_FAIL, payload: error.response.data });
+    dispatch({ type: GET_INTERACTION_FAIL, payload: error.response.data });
   }
 };

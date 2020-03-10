@@ -1,7 +1,8 @@
 import {
   GET_INTERACTION,
   INTERACTION_LOADED,
-  GET_INTERACTION_FAIL
+  GET_INTERACTION_FAIL,
+  UPDATE_INTERACTION
 } from '../actions/types';
 import { produce } from 'immer';
 
@@ -28,6 +29,16 @@ export default function(state = initialState, action) {
       return produce(state, draftState => {
         draftState.data = payload.response;
         draftState.loading = false;
+      });
+    case UPDATE_INTERACTION:
+      return produce(state, draftState => {
+        const { sessionId } = payload;
+        if (state.data.length > 0) {
+          const currentSessionId = state.data[0].sessionId;
+          if (currentSessionId === sessionId) {
+            draftState.data.push(payload);
+          }
+        }
       });
     default:
       return state;
