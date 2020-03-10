@@ -17,9 +17,9 @@ class RTC extends Component {
     };
     this.setSessionId = this.setSessionId.bind(this);
   }
-  setSessionId(sessionId, channelId) {
+  setSessionId(sessionId, channelId, customerId) {
     const { loadInteraction } = this.props;
-    loadInteraction(channelId, sessionId);
+    loadInteraction(channelId, sessionId, customerId);
     this.setState({ sessionId });
   }
 

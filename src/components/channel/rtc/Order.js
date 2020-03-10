@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './Order.css';
 import OrderLists from './OrderLists';
 
 import capitalize from '../../../utils/capitalizeString';

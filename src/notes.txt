@@ -27,3 +27,31 @@ messageCount: 1
 
 countQueue
 whatsapp: 2
+
+# Cwc Tab State Blueprint
+
+const initialState = {
+  tab: [
+    {
+      sessionId: 'whatsapp-9ef76b0f-1751-424f-a28a-5e21fbd1dabc',
+      currentTab: 'profile',
+      profileTab: {
+        custId: '',
+        custName: '',
+        address: '',
+        email: '',
+        company: '',
+        hp1: '',
+        hp2: '',
+        office: ''
+      },
+      cwcTab: {
+        category: '',
+        subCategory: '',
+        remark: '',
+        feedback: '',
+        sentimen: ''
+      }
+    }
+  ]
+};

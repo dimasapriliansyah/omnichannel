@@ -3,11 +3,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 // import * as autoin from './actions/autoin';
-import * as rtc from './actions/rtc';
+import * as interaction from './actions/interaction';
 const middleware = [thunk];
 const initialState = {};
 const composeEnhancers = composeWithDevTools({
-  rtc,
+  interaction,
   trace: true,
   traceLimit: 25
 });

@@ -24,18 +24,6 @@ function ChatHeader(props) {
               <h6 className="font10 text-muted">{data[0].from}</h6>
             </div>
           </div>
-          <div className="chat-header-action">
-            <ul className="list-inline">
-              <li
-                className="list-inline-item"
-                style={{ marginTop: '4px !important' }}
-              >
-                <a href="#" className="btn btn-sm btn-red font11">
-                  End Interaction
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
       )}
     </Fragment>

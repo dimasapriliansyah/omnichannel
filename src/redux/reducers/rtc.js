@@ -4,6 +4,7 @@ import {
   RESET_CHAT_COUNT
 } from '../actions/types';
 import { produce } from 'immer';
+
 const initialState = {
   whatsapp: [],
   telegram: []
@@ -49,9 +50,9 @@ export default function(state = initialState, action) {
         });
 
         if (sessionExisted >= 0) {
-          if (messageType == 'text') {
+          if (messageType === 'text') {
             draftState[channelId][sessionExisted].lastChat = message;
-            if (actionType == 'in') {
+            if (actionType === 'in') {
               draftState[channelId][sessionExisted].messageCount++;
             }
           }

@@ -8,13 +8,15 @@ function OrderLists(props) {
   return lists[channelId].map(list => {
     const className =
       list.sessionId === currentSessionId
-        ? 'open-chat list-group-item'
-        : 'list-group-item';
+        ? 'open-chat list-group-item animate-blink'
+        : 'list-group-item animate-blink';
     return (
       <li
         className={className}
         key={list.sessionId}
-        onClick={e => setSessionId(list.sessionId, list.channelId)}
+        onClick={e =>
+          setSessionId(list.sessionId, list.channelId, list.customerId)
+        }
       >
         <figure className="avatar">
           <span className="avatar-title bg-info rounded-circle">

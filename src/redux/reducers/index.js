@@ -7,13 +7,15 @@ import autoin from './autoin';
 import rtc from './rtc';
 import interaction from './interaction';
 import outgoing from './outgoing';
+import cwc from './cwc';
 
 const appReducer = combineReducers({
   auth,
   autoin,
   rtc,
   interaction,
-  outgoing
+  outgoing,
+  cwc
 });
 const rootReducer = (state, action) => {
   if (action.type === USER_LOGGEDOUT) {
