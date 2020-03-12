@@ -76,7 +76,6 @@ class Content extends Component {
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount');
     this.socket.close();
     this.socket = null;
   }
