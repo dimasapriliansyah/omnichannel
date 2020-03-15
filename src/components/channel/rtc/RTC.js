@@ -7,7 +7,7 @@ import { loadInteraction } from '../../../redux/actions/interaction';
 import Order from './Order';
 import Chat from './Chat';
 
-import Cwc from '../../layout/Cwc';
+import Cwc from '../../shared/cwc/Cwc';
 
 class RTC extends Component {
   constructor(props) {

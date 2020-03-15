@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 
-import { tabSetCurrentTab } from '../../redux/actions/cwc';
+import { tabSetCurrentTab } from '../../../redux/actions/cwc';
 
 function CwcHeader({ tabSetCurrentTab, currentTab, loading, sessionId }) {
   const onClick = activeTab => {

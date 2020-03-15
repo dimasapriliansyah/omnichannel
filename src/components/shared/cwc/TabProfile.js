@@ -2,9 +2,9 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { tabSetProfile } from '../../redux/actions/cwc';
+import { tabSetProfile } from '../../../redux/actions/cwc';
 
-import createAvatartString from '../../utils/createAvatartString';
+import createAvatartString from '../../../utils/createAvatartString';
 
 function CwcTabProfile({
   currentTab,
