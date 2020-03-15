@@ -10,19 +10,33 @@ import './Chat.css';
 
 class Chat extends Component {
   render() {
-    const { interaction, agentdata } = this.props;
-    const { loading, data, error } = interaction;
+    const { interaction, agentdata, currentSessionId } = this.props;
+    const { loading, messages, error } = interaction;
+
+    let from = '';
+    let fromName = '';
+
+    if (messages.length > 0) {
+      from = messages[0].from.slice(0, -3) + 'xxx';
+      fromName = messages[0].fromName;
+    }
 
     return (
       <div className="chat" id="app-chat">
-        <ChatHeader loading={loading} data={data} error={error} />
-        <ChatBody loading={loading} data={data} error={error} />
+        <ChatHeader
+          loading={loading}
+          from={from}
+          fromName={fromName}
+          sessionId={currentSessionId}
+          error={error}
+        />
+        {/* <ChatBody loading={loading} messages={messages} error={error} />
         <ChatFooter
           loading={loading}
-          data={data}
+          messages={messages}
           error={error}
           agentdata={agentdata}
-        />
+        /> */}
       </div>
     );
   }
