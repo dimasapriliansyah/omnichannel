@@ -11,14 +11,17 @@ import './Chat.css';
 class Chat extends Component {
   render() {
     const { interaction, agentdata, currentSessionId } = this.props;
-    const { loading, messages, error } = interaction;
+    const { loading, interactions, error } = interaction;
 
     let from = '';
     let fromName = '';
+    let chats = [];
 
-    if (messages.length > 0) {
+    if (typeof interactions[currentSessionId] !== 'undefined') {
+      const messages = interactions[currentSessionId];
       from = messages[0].from.slice(0, -3) + 'xxx';
       fromName = messages[0].fromName;
+      chats = messages;
     }
 
     return (
@@ -30,8 +33,8 @@ class Chat extends Component {
           sessionId={currentSessionId}
           error={error}
         />
-        {/* <ChatBody loading={loading} messages={messages} error={error} />
-        <ChatFooter
+        <ChatBody loading={loading} chats={chats} error={error} />
+        {/* <ChatFooter
           loading={loading}
           messages={messages}
           error={error}

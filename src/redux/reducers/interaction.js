@@ -1,13 +1,14 @@
 import {
   GET_INTERACTION,
   GET_INTERACTION_FAIL,
-  INTERACTION_LOADED
+  INTERACTION_LOADED,
+  UPDATE_INTERACTION
 } from '../actions/types';
 import { produce } from 'immer';
 
 const initialState = {
+  interactions: {},
   loading: false,
-  messages: [],
   error: null
 };
 
@@ -26,8 +27,17 @@ export default function(state = initialState, action) {
       });
     case INTERACTION_LOADED:
       return produce(state, draftState => {
-        draftState.messages = payload.response;
+        const { response, sessionId } = payload;
+        draftState.interactions[sessionId] = response;
         draftState.loading = false;
+      });
+    case UPDATE_INTERACTION:
+      return produce(state, draftState => {
+        const { sessionId } = payload;
+        const interactionExists = state.interactions[sessionId];
+        if (interactionExists) {
+          draftState.interactions[sessionId].push(payload);
+        }
       });
     default:
       return state;

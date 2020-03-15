@@ -1,9 +1,11 @@
 import {
   RTC_NEW_QUEUE,
-  RTC_NEW_INTERACTION,
+  RTC_UPDATE_QUEUE,
   RESET_CHAT_COUNT
 } from '../actions/types';
 import { produce } from 'immer';
+
+import getChannelBySessionId from '../../utils/getChannelBySessionId';
 
 const initialState = {
   whatsapp: [],
@@ -16,32 +18,18 @@ export default function(state = initialState, action) {
   switch (type) {
     case RTC_NEW_QUEUE:
       return produce(state, draftState => {
-        let sessionExisted = -1;
+        const { channelId } = payload;
 
-        const { channelId, sessionId, lastChat } = payload;
-
-        draftState[channelId].forEach((data, index) => {
-          if (data.sessionId === sessionId) {
-            sessionExisted = index;
-          }
-        });
-
-        if (sessionExisted >= 0) {
-          draftState[channelId][sessionExisted].lastChat = lastChat;
-          draftState[channelId][sessionExisted].messageCount++;
-        } else {
-          payload.messageCount = 0;
-          draftState[channelId].push(payload);
-        }
+        payload.messageCount = 0;
+        draftState[channelId].push(payload);
       });
-    case RTC_NEW_INTERACTION:
+    case RTC_UPDATE_QUEUE:
       return produce(state, draftState => {
         let sessionExisted = -1;
 
         const { sessionId, actionType, messageType, message } = payload;
 
-        const channelIndex = sessionId.indexOf('-');
-        const channelId = sessionId.substring(0, channelIndex);
+        const channelId = getChannelBySessionId(sessionId);
 
         draftState[channelId].forEach((data, index) => {
           if (data.sessionId === sessionId) {

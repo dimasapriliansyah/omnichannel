@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { loadInteraction } from '../../../redux/actions/interaction';
+import { resetChatCount } from '../../../redux/actions/rtc';
 
 import Order from './Order';
 import Chat from './Chat';
@@ -18,8 +19,9 @@ class RTC extends Component {
     this.setSessionId = this.setSessionId.bind(this);
   }
   setSessionId(sessionId, channelId, customerId) {
-    const { loadInteraction } = this.props;
+    const { loadInteraction, resetChatCount } = this.props;
     loadInteraction(channelId, sessionId, customerId);
+    resetChatCount(channelId, sessionId);
     this.setState({ sessionId });
   }
 
@@ -51,4 +53,6 @@ const mapStateToProps = ({ rtc, auth }) => ({
   agentdata: auth.user
 });
 
-export default connect(mapStateToProps, { loadInteraction })(RTC);
+export default connect(mapStateToProps, { loadInteraction, resetChatCount })(
+  RTC
+);
