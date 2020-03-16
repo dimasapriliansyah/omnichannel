@@ -21,38 +21,6 @@ function Messages({ chats }) {
           />
         )
       )}
-      {/* {chats.map(chat => (
-        <div
-          className={
-            chat.actionType === 'in'
-              ? 'message-item'
-              : 'message-item outgoing-message'
-          }
-          key={chat.id}
-        >
-          <div className={chatClassName(chat)}>
-            {chat.messageType === 'text' ? (
-              chat.message
-            ) : (
-              <Fragment>
-                <div class="file-icon">
-                  <i class="ti-file text-white"></i>
-                </div>
-                <div>
-                  <div>
-                    style.zip <i class="text-white small">41.36 Mb</i>
-                  </div>
-                </div>
-              </Fragment>
-            )}
-          </div>
-          <div className="message-action">
-            {chat.sendDate && (
-              <em>{dateFormat(chat.sendDate, 'HH:MM:ss dd-mm-yyyy ')}</em>
-            )}
-          </div>
-        </div>
-      ))} */}
     </div>
   );
 }

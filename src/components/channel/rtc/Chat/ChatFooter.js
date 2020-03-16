@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import produce from 'immer';
 import { connect } from 'react-redux';
 
-import { sendOutgoing } from '../../../../redux/actions/outgoing';
+import {
+  sendOutgoing,
+  sendOutgoingMedia
+} from '../../../../redux/actions/outgoing';
+
+import ModalMedia from './ModalMedia';
 
 function ChatFooter({
   sessionId,
@@ -12,35 +17,80 @@ function ChatFooter({
   fromName,
   username,
   loadingChat,
-  sendOutgoing
+  sendOutgoing,
+  sendOutgoingMedia
 }) {
-  console.log('loadingChat', loadingChat);
-  console.log('sessionId', sessionId);
   const [chatData, setchatData] = useState({
+    media: null,
     message: '',
     messageType: 'text'
   });
 
-  const { message, messageType } = chatData;
-  const onChangeTextInput = e => {
+  const { media, message, messageType } = chatData;
+
+  // Media Upload
+  const [mediaModal, setMediaModal] = useState(false);
+  const openMediaModal = () => {
+    setMediaModal(true);
+  };
+  const closeMediaModal = () => {
     const nextState = produce(chatData, draftState => {
-      draftState.message = e.target.value;
+      draftState.media = null;
+      draftState.messageType = 'text';
+    });
+    setchatData(nextState);
+    setMediaModal(false);
+  };
+
+  const onChangeMediaInput = e => {
+    const file = e.target.files[0];
+
+    const nextState = produce(chatData, draftState => {
+      draftState.media = file;
+      draftState.messageType = 'media';
     });
     setchatData(nextState);
   };
+
+  const onUploadMedia = e => {
+    onSubmit(e);
+  };
+  // Media Upload
+
+  const onChangeTextInput = e => {
+    const nextState = produce(chatData, draftState => {
+      draftState.message = e.target.value;
+      draftState.messageType = 'text';
+    });
+    setchatData(nextState);
+  };
+
   const onSubmit = e => {
     e.preventDefault();
+    const convId = uuidv4();
     if (messageType === 'text') {
-      const convId = uuidv4();
       sendOutgoing({ sessionId, from, fromName, username, message, convId });
+    } else if (messageType === 'media') {
+      sendOutgoingMedia({ sessionId, from, fromName, username, media, convId });
     }
   };
   return (
     <div className="chat-footer">
       {sessionId !== '' && !loadingChat && (
         <form onSubmit={e => onSubmit(e)}>
-          <button className="btn btn-light btn-floating" type="button">
+          <button
+            className="btn btn-light btn-floating"
+            type="button"
+            onClick={openMediaModal}
+          >
             <i className="fa fa-paperclip"></i>
+            <ModalMedia
+              modal={mediaModal}
+              media={media}
+              onChange={onChangeMediaInput}
+              onClosed={closeMediaModal}
+              onUploadMedia={onUploadMedia}
+            />
           </button>
           <input
             type="text"
@@ -48,7 +98,7 @@ function ChatFooter({
             name="message"
             value={message}
             onChange={e => onChangeTextInput(e)}
-            placeholder="Type your message here......"
+            placeholder={`Replying to ${sessionId}`}
             aria-label="Recipient's username"
             aria-describedby="button-addon2"
           />
@@ -74,4 +124,6 @@ ChatFooter.propTypes = {
 
 const mapStateToProps = ({ outgoing }) => ({ outgoing });
 
-export default connect(mapStateToProps, { sendOutgoing })(ChatFooter);
+export default connect(mapStateToProps, { sendOutgoing, sendOutgoingMedia })(
+  ChatFooter
+);
