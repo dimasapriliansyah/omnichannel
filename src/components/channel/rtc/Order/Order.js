@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './Order.css';
 import OrderLists from './OrderLists';
 
-import capitalize from '../../../utils/capitalizeString';
+import capitalize from '../../../../utils/capitalizeString';
 
 function Order(props) {
   const { lists, match, currentSessionId, setSessionId } = props;

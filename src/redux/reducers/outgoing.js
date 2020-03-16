@@ -2,6 +2,9 @@ import { SENDING_INTERACTION, SENT_SUCCESS, SENT_FAIL } from '../actions/types';
 import { produce } from 'immer';
 
 const initialState = {
+  pending: [],
+  delivered: [],
+  failed: [],
   loading: false,
   error: null
 };
@@ -13,6 +16,7 @@ export default function(state = initialState, action) {
     case SENDING_INTERACTION:
       return produce(state, draftState => {
         draftState.loading = true;
+        draftState.pending.push(payload);
       });
     case SENT_SUCCESS:
       return produce(state, draftState => {

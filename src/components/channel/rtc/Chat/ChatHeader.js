@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
-import Loading from '../../shared/Loading';
+import Loading from '../../../shared/Loading';
 
-import avatarString from '../../../utils/createAvatartString';
+import avatarString from '../../../../utils/createAvatartString';
 
 import PropTypes from 'prop-types';
 

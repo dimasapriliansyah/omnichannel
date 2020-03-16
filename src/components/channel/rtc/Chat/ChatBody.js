@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useRef } from 'react';
 import dateFormat from 'dateformat';
 import PropTypes from 'prop-types';
 
-import Loading from '../../shared/Loading';
+import Loading from '../../../shared/Loading';
 
 function ChatBody(props) {
   const { loading, chats, error } = props;

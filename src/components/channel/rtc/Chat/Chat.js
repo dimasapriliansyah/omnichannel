@@ -15,10 +15,12 @@ class Chat extends Component {
 
     let from = '';
     let fromName = '';
+    let fromOrigin = '';
     let chats = [];
 
     if (typeof interactions[currentSessionId] !== 'undefined') {
       const messages = interactions[currentSessionId];
+      fromOrigin = messages[0].from;
       from = messages[0].from.slice(0, -3) + 'xxx';
       fromName = messages[0].fromName;
       chats = messages;
@@ -34,12 +36,13 @@ class Chat extends Component {
           error={error}
         />
         <ChatBody loading={loading} chats={chats} error={error} />
-        {/* <ChatFooter
-          loading={loading}
-          messages={messages}
-          error={error}
-          agentdata={agentdata}
-        /> */}
+        <ChatFooter
+          sessionId={currentSessionId}
+          from={fromOrigin}
+          fromName={fromName}
+          username={agentdata.username}
+          loadingChat={loading}
+        />
       </div>
     );
   }

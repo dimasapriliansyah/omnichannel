@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { loadInteraction } from '../../../redux/actions/interaction';
 import { resetChatCount } from '../../../redux/actions/rtc';
 
-import Order from './Order';
-import Chat from './Chat';
+import Order from './Order/Order';
+import Chat from './Chat/Chat';
 
 import Cwc from '../../shared/cwc/Cwc';
 
@@ -45,7 +45,8 @@ class RTC extends Component {
 
 RTC.propTypes = {
   match: PropTypes.object.isRequired,
-  rtcQueueLists: PropTypes.object.isRequired
+  rtcQueueLists: PropTypes.object.isRequired,
+  agentdata: PropTypes.object.isRequired
 };
 
 const mapStateToProps = ({ rtc, auth }) => ({

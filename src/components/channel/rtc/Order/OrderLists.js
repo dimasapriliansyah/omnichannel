@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import createAvatartString from '../../../utils/createAvatartString';
+import createAvatartString from '../../../../utils/createAvatartString';
 
 function OrderLists(props) {
   const { lists, channelId, currentSessionId, setSessionId } = props;
