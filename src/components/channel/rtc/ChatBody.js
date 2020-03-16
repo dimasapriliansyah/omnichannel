@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useRef } from 'react';
+import dateFormat from 'dateformat';
 import PropTypes from 'prop-types';
 
 import Loading from '../../shared/Loading';
@@ -63,6 +64,13 @@ function ChatBody(props) {
                       </Fragment>
                     )}
                   </div>
+                  <div className="message-action">
+                    {chat.sendDate && (
+                      <em>
+                        {dateFormat(chat.sendDate, 'HH:MM:ss dd-mm-yyyy ')}
+                      </em>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -73,6 +81,10 @@ function ChatBody(props) {
   );
 }
 
-ChatBody.propTypes = {};
+ChatBody.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  chats: PropTypes.array.isRequired,
+  error: PropTypes.object
+};
 
 export default ChatBody;
