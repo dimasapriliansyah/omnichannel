@@ -1,7 +1,8 @@
 import {
   RTC_NEW_QUEUE,
   RTC_UPDATE_QUEUE,
-  RESET_CHAT_COUNT
+  RESET_CHAT_COUNT,
+  RTC_UPDATE_DRAFT_QUEUE
 } from '../actions/types';
 import { produce } from 'immer';
 
@@ -43,6 +44,29 @@ export default function(state = initialState, action) {
             if (actionType === 'in') {
               draftState[channelId][sessionExisted].messageCount++;
             }
+          }
+        }
+      });
+    case RTC_UPDATE_DRAFT_QUEUE:
+      return produce(state, draftState => {
+        let sessionExisted = -1;
+
+        const { sessionId, message } = payload;
+
+        const channelId = getChannelBySessionId(sessionId);
+
+        draftState[channelId].forEach((data, index) => {
+          if (data.sessionId === sessionId) {
+            sessionExisted = index;
+          }
+        });
+
+        if (sessionExisted >= 0) {
+          if (message === '' || !message) {
+            draftState[channelId][sessionExisted].isDraft = false;
+          } else {
+            draftState[channelId][sessionExisted].isDraft = true;
+            draftState[channelId][sessionExisted].draft = `Draft: ${message}`;
           }
         }
       });

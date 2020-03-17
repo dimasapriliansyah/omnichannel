@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
-import produce from 'immer';
 import { connect } from 'react-redux';
+
+import {
+  setDraftMessageText,
+  updateRTCDraftMessage
+} from '../../../../redux/actions/interaction';
 
 import {
   sendOutgoing,
@@ -16,99 +20,98 @@ function ChatFooter({
   from,
   fromName,
   username,
-  loadingChat,
+  draft,
   sendOutgoing,
-  sendOutgoingMedia
+  sendOutgoingMedia,
+  setDraftMessageText,
+  updateRTCDraftMessage
 }) {
-  const [chatData, setchatData] = useState({
-    media: null,
-    message: '',
-    messageType: 'text'
-  });
-
-  const { media, message, messageType } = chatData;
+  const [media, setMedia] = useState(null);
+  const [messageType, setMessageType] = useState('text');
+  const [mediaModal, setMediaModal] = useState(false);
 
   // Media Upload
-  const [mediaModal, setMediaModal] = useState(false);
   const openMediaModal = () => {
     setMediaModal(true);
   };
   const closeMediaModal = () => {
-    const nextState = produce(chatData, draftState => {
-      draftState.media = null;
-      draftState.messageType = 'text';
-    });
-    setchatData(nextState);
+    setMedia(null);
+    setMessageType('text');
     setMediaModal(false);
   };
 
   const onChangeMediaInput = e => {
     const file = e.target.files[0];
-
-    const nextState = produce(chatData, draftState => {
-      draftState.media = file;
-      draftState.messageType = 'media';
-    });
-    setchatData(nextState);
+    setMessageType('media');
+    setMedia(file);
   };
 
   const onUploadMedia = e => {
+    setDraftMessageText(sessionId, '');
     onSubmit(e);
   };
   // Media Upload
 
   const onChangeTextInput = e => {
-    const nextState = produce(chatData, draftState => {
-      draftState.message = e.target.value;
-      draftState.messageType = 'text';
-    });
-    setchatData(nextState);
+    const message = e.target.value;
+    setDraftMessageText(sessionId, message);
+  };
+
+  const onBlurTextInput = () => {
+    const actionType = 'out';
+    updateRTCDraftMessage(sessionId, actionType, messageType);
   };
 
   const onSubmit = e => {
     e.preventDefault();
     const convId = uuidv4();
     if (messageType === 'text') {
-      sendOutgoing({ sessionId, from, fromName, username, message, convId });
+      sendOutgoing({
+        sessionId,
+        from,
+        fromName,
+        username,
+        message: draft,
+        convId
+      });
     } else if (messageType === 'media') {
       sendOutgoingMedia({ sessionId, from, fromName, username, media, convId });
     }
   };
   return (
     <div className="chat-footer">
-      {sessionId !== '' && !loadingChat && (
-        <form onSubmit={e => onSubmit(e)}>
-          <button
-            className="btn btn-light btn-floating"
-            type="button"
-            onClick={openMediaModal}
-          >
-            <i className="fa fa-paperclip"></i>
-            <ModalMedia
-              modal={mediaModal}
-              media={media}
-              onChange={onChangeMediaInput}
-              onClosed={closeMediaModal}
-              onUploadMedia={onUploadMedia}
-            />
-          </button>
-          <input
-            type="text"
-            className="form-control"
-            name="message"
-            value={message}
-            onChange={e => onChangeTextInput(e)}
-            placeholder={`Replying to ${sessionId}`}
-            aria-label="Recipient's username"
-            aria-describedby="button-addon2"
+      <form onSubmit={e => onSubmit(e)}>
+        <button
+          className="btn btn-light btn-floating"
+          type="button"
+          onClick={openMediaModal}
+        >
+          <i className="fa fa-paperclip"></i>
+          <ModalMedia
+            modal={mediaModal}
+            media={media}
+            onChange={onChangeMediaInput}
+            onClosed={closeMediaModal}
+            onUploadMedia={onUploadMedia}
           />
-          <div className="form-buttons">
-            <button className="btn btn-primary btn-floating" type="submit">
-              <i className="fa fa-send"></i>
-            </button>
-          </div>
-        </form>
-      )}
+        </button>
+        <input
+          type="text"
+          className="form-control"
+          name="message"
+          value={draft || ''}
+          onChange={e => onChangeTextInput(e)}
+          onBlur={e => onBlurTextInput(e)}
+          placeholder={`Replying to ${sessionId}`}
+          aria-label="Recipient's username"
+          aria-describedby="button-addon2"
+        />
+        <div className="form-buttons">
+          <button className="btn btn-primary btn-floating" type="submit">
+            <i className="fa fa-send"></i>
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
@@ -118,12 +121,19 @@ ChatFooter.propTypes = {
   from: PropTypes.string.isRequired,
   fromName: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
-  loadingChat: PropTypes.bool.isRequired,
-  sendOutgoing: PropTypes.func.isRequired
+  sendOutgoing: PropTypes.func.isRequired,
+  sendOutgoingMedia: PropTypes.func.isRequired,
+  setDraftMessageText: PropTypes.func.isRequired,
+  updateRTCDraftMessage: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ outgoing }) => ({ outgoing });
+const mapStateToProps = ({ outgoing }) => ({
+  outgoing
+});
 
-export default connect(mapStateToProps, { sendOutgoing, sendOutgoingMedia })(
-  ChatFooter
-);
+export default connect(mapStateToProps, {
+  sendOutgoing,
+  sendOutgoingMedia,
+  setDraftMessageText,
+  updateRTCDraftMessage
+})(ChatFooter);

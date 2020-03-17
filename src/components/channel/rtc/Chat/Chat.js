@@ -10,8 +10,9 @@ import './Chat.css';
 
 class Chat extends Component {
   render() {
+    console.log('render');
     const { interaction, agentdata, currentSessionId } = this.props;
-    const { loading, interactions, error } = interaction;
+    const { loading, interactions, drafts, error } = interaction;
 
     let from = '';
     let fromName = '';
@@ -36,13 +37,15 @@ class Chat extends Component {
           error={error}
         />
         <ChatBody loading={loading} chats={chats} error={error} />
-        <ChatFooter
-          sessionId={currentSessionId}
-          from={fromOrigin}
-          fromName={fromName}
-          username={agentdata.username}
-          loadingChat={loading}
-        />
+        {currentSessionId !== '' && !loading && (
+          <ChatFooter
+            sessionId={currentSessionId}
+            draft={drafts[currentSessionId]}
+            from={fromOrigin}
+            fromName={fromName}
+            username={agentdata.username}
+          />
+        )}
       </div>
     );
   }

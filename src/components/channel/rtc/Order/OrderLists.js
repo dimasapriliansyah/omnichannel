@@ -25,7 +25,8 @@ function OrderLists(props) {
         </figure>
         <div className="users-list-body">
           <h6>{list.fromName}</h6>
-          <p>{list.lastChat}</p>
+          {list.isDraft ? <em>{list.draft}</em> : <p>{list.lastChat}</p>}
+
           {list.messageCount > 0 && (
             <div className="users-list-action">
               <div className="new-message-count">{list.messageCount}</div>
